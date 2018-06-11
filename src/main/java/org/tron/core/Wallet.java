@@ -440,7 +440,7 @@ public class Wallet {
   public ContractDeployContract getContract(GrpcAPI.BytesMessage bytesMessage) {
     byte[] address = bytesMessage.getValue().toByteArray();
     AccountCapsule accountCapsule = dbManager.getAccountStore().get(address);
-    if (accountCapsule == null || ArrayUtils.isEmpty(accountCapsule.getCodeHash())) {
+    if (accountCapsule == null) {
       logger.error("Get contract failed, the account is not exist or the account does not have code hash!");
       return null;
     }

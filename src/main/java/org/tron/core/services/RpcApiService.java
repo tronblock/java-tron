@@ -366,9 +366,11 @@ public class RpcApiService implements Service {
     private TransactionCapsule createTransactionCapsule(com.google.protobuf.Message message,
         ContractType contractType) throws ContractValidateException {
       TransactionCapsule trx = new TransactionCapsule(message, contractType);
-      List<Actuator> actList = ActuatorFactory.createActuator(trx, dbManager);
-      for (Actuator act : actList) {
-        act.validate();
+      if (contractType != ContractType.DeployContract && contractType != ContractType.DeployContract) {
+        List<Actuator> actList = ActuatorFactory.createActuator(trx, dbManager);
+        for (Actuator act : actList) {
+          act.validate();
+        }
       }
       try {
         BlockCapsule headBlock = null;
@@ -709,7 +711,13 @@ public class RpcApiService implements Service {
     @Override
     public void deployContract(org.tron.protos.Contract.ContractDeployContract request,
                                io.grpc.stub.StreamObserver<org.tron.protos.Protocol.Transaction> responseObserver) {
-      Transaction trx = wallet.deployContract(request);
+      Transaction trx;
+      try {
+        trx = createTransactionCapsule(request, ContractType.DeployContract).getInstance(); //wallet.deployContract(request);
+      } catch (ContractValidateException e) {
+        trx = null;
+      }
+
       responseObserver.onNext(trx);
       responseObserver.onCompleted();
     }
@@ -717,7 +725,13 @@ public class RpcApiService implements Service {
     @Override
     public void triggerContract(Contract.ContractTriggerContract request,
                                 StreamObserver<Transaction> responseObserver) {
-      Transaction trx = wallet.triggerContract(request);
+      Transaction trx;
+      try {
+        trx = createTransactionCapsule(request, ContractType.TriggerContract)
+                .getInstance();//wallet.triggerContract(request);
+      } catch (ContractValidateException e) {
+        trx = null;
+      }
       responseObserver.onNext(trx);
       responseObserver.onCompleted();
     }

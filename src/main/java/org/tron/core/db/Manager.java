@@ -28,6 +28,7 @@ import org.springframework.stereotype.Component;
 import org.tron.common.crypto.ECKey;
 import org.tron.common.overlay.discover.Node;
 import org.tron.common.runtime.Runtime;
+import org.tron.common.runtime.vm.program.invoke.ProgramInvokeFactory;
 import org.tron.common.runtime.vm.program.invoke.ProgramInvokeFactoryImpl;
 import org.tron.common.utils.ByteArray;
 import org.tron.common.utils.DialogOptional;
@@ -897,12 +898,22 @@ public class Manager {
     /**  VM execute  **/
     //Runtime(Transaction tx, Block block, Manager dbManager,
     //                   ProgramInvokeFactory programInvokeFactory)
-    Runtime runtime = new Runtime(trxCap.getInstance(), null, this, new ProgramInvokeFactoryImpl());
-    runtime.execute();
-    runtime.go();
-    if (runtime.getResult().getException() != null) {
-      throw new RuntimeException("Runtime exe failed!");
+    if (block != null) {
+      Runtime runtime = new Runtime(trxCap.getInstance(), block, this, new ProgramInvokeFactoryImpl());
+      runtime.execute();
+      runtime.go();
+      if (runtime.getResult().getException() != null) {
+        throw new RuntimeException("Runtime exe failed!");
+      }
+    } else {
+      Runtime runtime = new Runtime(trxCap.getInstance(), this, new ProgramInvokeFactoryImpl());
+      runtime.execute();
+      runtime.go();
+      if (runtime.getResult().getException() != null) {
+        throw new RuntimeException("Runtime exe failed!");
+      }
     }
+
     /*
     final List<Actuator> actuatorList = ActuatorFactory.createActuator(trxCap, this);
     TransactionResultCapsule ret = new TransactionResultCapsule();

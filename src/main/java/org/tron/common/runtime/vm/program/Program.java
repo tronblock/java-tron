@@ -72,7 +72,7 @@ public class Program {
     private ProgramInvokeFactory programInvokeFactory = new ProgramInvokeFactoryImpl();
 
     private ProgramOutListener listener;
-    private ProgramTraceListener traceListener;
+    //private ProgramTraceListener traceListener;
     private ProgramStorageChangeListener storageDiffListener = new ProgramStorageChangeListener();
     private CompositeProgramListener programListener = new CompositeProgramListener();
 
@@ -82,7 +82,7 @@ public class Program {
     private byte[] returnDataBuffer;
 
     private ProgramResult result = new ProgramResult();
-    private ProgramTrace trace = new ProgramTrace();
+    //private ProgramTrace trace = new ProgramTrace();
 
     private byte[] codeHash;
     private byte[] ops;
@@ -116,11 +116,11 @@ public class Program {
         this.codeHash = codeHash;
         this.ops = nullToEmpty(ops);
 
-        traceListener = new ProgramTraceListener(config.vmTrace());
+        //traceListener = new ProgramTraceListener(config.vmTrace());
         this.memory = setupProgramListener(new Memory());
         this.stack = setupProgramListener(new Stack());
         this.storage = setupProgramListener(new Storage(programInvoke));
-        this.trace = new ProgramTrace(config, programInvoke);
+        //this.trace = new ProgramTrace(config, programInvoke);
     }
 
     public ProgramPrecompile getProgramPrecompile() {
@@ -165,7 +165,7 @@ public class Program {
 
     private <T extends ProgramListenerAware> T setupProgramListener(T programListenerAware) {
         if (programListener.isEmpty()) {
-            programListener.addListener(traceListener);
+            //programListener.addListener(traceListener);
             programListener.addListener(storageDiffListener);
         }
 
@@ -904,13 +904,16 @@ public class Program {
     }
 
     public void saveOpTrace() {
+        /*
         if (this.pc < ops.length) {
             trace.addOp(ops[pc], pc, getCallDeep(), getDroplimit(), traceListener.resetActions());
         }
+        */
     }
 
     public ProgramTrace getTrace() {
-        return trace;
+        //return trace;
+        return null;
     }
 
     static String formatBinData(byte[] binData, int startPC) {

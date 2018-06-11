@@ -4,6 +4,7 @@ import com.google.protobuf.ByteString;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.tron.common.runtime.config.SystemProperties;
+import org.tron.common.runtime.vm.DataWord;
 import org.tron.common.runtime.vm.PrecompiledContracts;
 import org.tron.common.runtime.vm.VM;
 import org.tron.common.runtime.vm.program.InternalTransaction;
@@ -21,6 +22,8 @@ import org.tron.protos.Contract.ContractDeployContract;
 import org.tron.protos.Protocol;
 import org.tron.protos.Protocol.Block;
 import org.tron.protos.Protocol.Transaction;
+
+import javax.xml.crypto.Data;
 import java.util.List;
 
 import static org.apache.commons.lang3.ArrayUtils.isEmpty;
@@ -139,7 +142,6 @@ public class Runtime {
         } finally {
 
         }
-
     }
 
     public void execute() {
@@ -173,6 +175,17 @@ public class Runtime {
             this.program = new Program(dbManager.getAccountStore().get(contractAddress).getInstance().getCodeHash().toByteArray(),
                     code, programInvoke, new InternalTransaction(trx), config);
         }
+
+        // transfer
+        /*
+        DataWord sender = this.program.getCallerAddress();
+        DataWord toAddress = this.program.
+        DataWord amountData = this.program.getCallValue();
+        long amount = amountData.longValue();
+        this.program.getCallerAddress()
+        */
+
+
     }
 
     /*

@@ -31,7 +31,7 @@ public class VM {
 
     /* Keeps track of the number of steps performed in this VM */
     private int vmCounter = 0;
-    private boolean vmTrace;
+    //private boolean vmTrace;
     // private long dumpBlock;
 
     private final SystemProperties config;
@@ -43,7 +43,7 @@ public class VM {
     @Autowired
     public VM(SystemProperties config) {
         this.config = config;
-        vmTrace = config.vmTrace();
+        //vmTrace = config.vmTrace();
         // dumpBlock = config.dumpBlock();
     }
 
@@ -74,9 +74,11 @@ public class VM {
     }
 
     public void step(Program program) throws BalanceInsufficientException {
+        /*
         if (vmTrace) {
             program.saveOpTrace();
         }
+        */
 
         try {
             OpCode op = OpCode.code(program.getCurrentOp());
